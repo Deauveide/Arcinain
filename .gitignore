@@ -1,0 +1,38 @@
+# Dependencias y artefactos
+node_modules/
+dist/
+*.log
+
+# Secretos y configuración local
+.env
+server/.env
+server/data/backups/
+server/data/stats*.json
+
+# Originales pesados: viven fuera del repo (ver README, "Originales fuera del repositorio")
+originales/
+Museo-originales/
+*.blend
+*.blend1
+*.psd
+*.tif
+*.tiff
+*.raw
+*.cr2
+*.nef
+
+# Caché del visor (service worker en pruebas)
+.cache/
+
+# Sistema y editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Estado de herramientas de IA local
+.claude/
+
+# Logs de Playwright (capturas de prueba se guardan fuera del repo)
+.playwright-mcp/

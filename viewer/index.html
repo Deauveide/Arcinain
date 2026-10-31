@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Recorrido virtual en 3D del Museo Rayo, Roldanillo (Valle del Cauca).">
+  <meta name="theme-color" content="#16171a">
+  <!-- Icono vacío: evita una petición 404 a /favicon.ico -->
+  <link rel="icon" href="data:,">
+  <title>Museo Rayo · Recorrido virtual</title>
+  <link rel="stylesheet" href="./css/styles.css">
+  <!-- Módulos ES sin paso de build: "three" y sus complementos apuntan a /vendor -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./vendor/three/build/three.module.js",
+      "three/addons/": "./vendor/three/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body data-modo="escritorio">
+  <!-- El canvas del renderer se inserta aquí desde main.js -->
+  <div id="vista" class="vista"></div>
+
+  <!-- Pantalla de inicio: título, instrucciones, carga y botón Entrar -->
+  <section id="pantalla-inicio" class="capa inicio" aria-labelledby="titulo-app">
+    <div class="tarjeta">
+      <h1 id="titulo-app" data-i18n="app.titulo">Museo Rayo</h1>
+      <p class="subtitulo" data-i18n="app.subtitulo">Recorrido virtual 3D</p>
+      <p class="instrucciones" data-instrucciones></p>
+      <div class="progreso" aria-hidden="true"><div id="barra-progreso" class="progreso-barra"></div></div>
+      <div id="estado" class="estado" role="status" aria-live="polite"></div>
+      <div class="acciones">
+        <button id="btn-entrar" class="boton primario" type="button" disabled data-i18n="inicio.entrar">Entrar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Controles en pantalla durante la visita (joystick solo en celular) -->
+  <div id="hud" class="capa hud" hidden>
+    <p id="ayuda" class="ayuda" data-ayuda></p>
+    <div id="joystick" class="joystick" aria-hidden="true" hidden>
+      <div id="joystick-palo" class="joystick-palo"></div>
+    </div>
+  </div>
+
+  <!-- Panel de depuración: solo con ?debug=1 -->
+  <div id="debug-panel" class="debug" hidden></div>
+
+  <noscript>
+    <p class="aviso-noscript">Este recorrido necesita JavaScript activado.</p>
+  </noscript>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>

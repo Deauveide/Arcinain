@@ -1,0 +1,2 @@
+id,nodo,parada,tipo,titulo_es,artista,anio,tecnica_es,alto_m,ancho_m,profundidad_m,descripcion_es,creditos,derechos,archivo_original,audio
+OBRA_01,OBRA_01,PARADA_01,plano,EJEMPLO - reemplazar,Artista de ejemplo,1978,Óleo sobre tela,0.90,0.70,0.03,Texto de ficha de ejemplo.,Colección Museo Rayo,© Artista - todos los derechos reservados,originales/obras/ejemplo_01.tif,

@@ -1,0 +1,34 @@
+{
+  "app": {
+    "titulo": "Museo Rayo",
+    "subtitulo": "Recorrido virtual 3D · Roldanillo, Valle del Cauca"
+  },
+  "inicio": {
+    "entrar": "Entrar",
+    "instrucciones_escritorio": "Pulsa Entrar. Muévete con W A S D o con las flechas y mira con el ratón. Pulsa Esc para liberar el ratón.",
+    "instrucciones_movil": "Arrastra la pantalla para mirar. Usa el joystick para moverte. Toca el piso o una parada para ir allí."
+  },
+  "carga": {
+    "cargando": "Cargando la sala…",
+    "progreso": "Cargando la sala: {pct} %",
+    "lista": "Sala lista. Pulsa Entrar."
+  },
+  "errores": {
+    "sin_webgl": "Tu navegador no tiene WebGL activo. Actívalo o prueba con otro navegador.",
+    "sin_https": "Esta página no está en HTTPS. El recorrido funciona, pero la VR no estará disponible.",
+    "carga_sala": "No se pudo cargar la sala (assets/models/sala.glb). Revisa la consola del navegador."
+  },
+  "hud": {
+    "ayuda_escritorio": "W A S D o flechas: moverse · Q / E o flechas izquierda / derecha: girar · Ratón: mirar · Esc: liberar ratón",
+    "ayuda_movil": "Joystick: moverse · Arrastrar: mirar · Tocar el piso o una parada: ir allí"
+  },
+  "debug": {
+    "titulo": "Depuración",
+    "fps": "FPS",
+    "triangulos": "Triángulos",
+    "draws": "Draw calls",
+    "texturas": "Texturas en memoria",
+    "colisiones": "Ver colisiones",
+    "marcadores": "Ver marcadores"
+  }
+}

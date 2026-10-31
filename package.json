@@ -1,0 +1,17 @@
+{
+  "name": "arcinain-museo-rayo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Recorrido virtual 3D del Museo Rayo (Roldanillo, Valle del Cauca)",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "tools:sala": "node tools/generar-sala-provisional.mjs",
+    "viewer": "node tools/servir-visor.mjs"
+  },
+  "devDependencies": {
+    "@gltf-transform/core": "4.5.1"
+  }
+}
