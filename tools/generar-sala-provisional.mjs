@@ -15,7 +15,8 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const RAIZ = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const SALIDA = resolve(RAIZ, 'viewer/assets/models/sala.glb');
+// Salida separada de sala.glb: el visor usa sala.glb por defecto y ?sala=sala-provisional.glb para esta sala de prueba.
+const SALIDA = resolve(RAIZ, 'viewer/assets/models/sala-provisional.glb');
 
 // ---------------------------------------------------------------- geometría
 

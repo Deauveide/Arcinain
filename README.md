@@ -49,8 +49,9 @@ docs/                especificación y decisiones
 ### Comandos (fase 1)
 
 ```bash
-npm install            # instala @gltf-transform/core (solo para tools/)
-npm run tools:sala     # regenera viewer/assets/models/sala.glb (sala provisional)
+npm install            # instala @gltf-transform (solo para tools/)
+npm run tools:modulo   # adapta blender/Modulo museo.glb → viewer/assets/models/sala.glb (sala real, provisional en contrato)
+npm run tools:sala     # regenera viewer/assets/models/sala-provisional.glb (sala de prueba generada por código)
 npm run viewer         # sirve viewer/ en http://localhost:8080
 ```
 
@@ -60,6 +61,7 @@ Parámetros del visor (en la URL):
 |---|---|
 | `?debug=1` | Panel de FPS, triángulos, draw calls y texturas; casillas para ver colisiones y marcadores. Expone `window.__visor` para inspección desde la consola. |
 | `?calidad=bajo\|medio\|alto` | Fuerza el perfil de calidad (por defecto: `alto` en escritorio, `medio` en celular). |
+| `?sala=sala-provisional.glb` | Carga otro GLB de `viewer/assets/models/` (por defecto `sala.glb`). |
 
 **Celular en la red local:** `npm run viewer` muestra la IP local. Ese acceso no usa HTTPS, así que la VR no estará disponible (ver "Ejecución y exposición").
 

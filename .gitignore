@@ -14,6 +14,8 @@ originales/
 Museo-originales/
 *.blend
 *.blend1
+# Archivos de trabajo de Blender: solo se versiona viewer/assets/models/sala.glb
+blender/*.glb
 *.psd
 *.tif
 *.tiff

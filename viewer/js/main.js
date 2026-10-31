@@ -11,6 +11,10 @@ import { crearDebug } from './debug.js';
 const parametros = new URLSearchParams(location.search);
 const ES_DEBUG = parametros.get('debug') === '1';
 
+// GLB de la sala: por defecto sala.glb; ?sala=nombre.glb elige otro de viewer/assets/models/
+const SALA_SOLICITADA = parametros.get('sala') ?? 'sala.glb';
+const NOMBRE_SALA = /^[\w.-]+\.glb$/.test(SALA_SOLICITADA) ? SALA_SOLICITADA : 'sala.glb';
+
 // Perfiles de calidad: tope de pixel ratio y distancia de dibujado (metros)
 const PERFILES = {
   bajo: { pixelRatio: 1.0, lejos: 60 },
@@ -90,7 +94,7 @@ async function iniciar() {
   mostrarEstado(t('carga.cargando'));
   let datos;
   try {
-    datos = await cargarSala('./assets/models/sala.glb', (fraccion) => {
+    datos = await cargarSala(`./assets/models/${NOMBRE_SALA}`, (fraccion) => {
       const pct = Math.round(fraccion * 100);
       $('barra-progreso').style.width = `${pct}%`;
       mostrarEstado(t('carga.progreso', { pct }));

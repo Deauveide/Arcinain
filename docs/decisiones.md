@@ -30,6 +30,7 @@ Estado: **Propuesta** (pendiente de confirmación del usuario), **Confirmada** o
 | D-23 | Modelo de Quest | Sin definir. Los perfiles de calidad se ajustarán cuando se conozca el modelo. | Pendiente |
 | D-24 | Campo de visión en celular vertical | En pantallas estrechas (aspecto < 0,8) el FOV vertical sube de 70° a 80°, para no perder el campo lateral. | Propuesta, validada en prueba headless (Fase 1) |
 | D-25 | Toques en celular | Un toque corto sin arrastre: si cae sobre una parada (`PARADA_xx`), el visitante va a esa parada; si cae sobre el piso (`PISO_*`), va al punto tocado. Joystick en la mitad izquierda inferior; arrastre en el resto para mirar. | Propuesta, validada en prueba headless (Fase 1) |
+| D-26 | Módulo de Blender como sala | La sala real es el módulo `blender/Modulo museo.glb`. Como aún no trae los nodos del contrato, `tools/adaptar-modulo.mjs` lo adapta y escribe `viewer/assets/models/sala.glb` (sin modificar el original). Asignaciones: `OBRA_01…08` = paneles `Panel_1.001…Panel_8.001` (1,3 m, uno por cara); `PARADA_0N` a 2,5 m delante de su obra; `SPAWN` en (0, 0, 3); `PISO_sala1` = `Piso_interior`; `COL_muro_*` (cuatro muros interiores a 5,4 m, espesor 0,2 m, altura 4,2 m) y `COL_banca`. Provisional: se sustituye cuando el módulo se exporte desde Blender con esos nombres. | Propuesta, validada en prueba headless (Fase 1) |
 
 ---
 

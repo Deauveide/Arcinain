@@ -9,9 +9,13 @@
   },
   "scripts": {
     "tools:sala": "node tools/generar-sala-provisional.mjs",
+    "tools:modulo": "node tools/adaptar-modulo.mjs",
     "viewer": "node tools/servir-visor.mjs"
   },
   "devDependencies": {
     "@gltf-transform/core": "4.5.1"
+  },
+  "dependencies": {
+    "@gltf-transform/extensions": "4.5.1"
   }
 }

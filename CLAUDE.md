@@ -31,6 +31,7 @@ viewer/        visor estático (Three.js, WebXR)
 server/        backend opcional (Fastify) — fase 7
 tools/         scripts Node: optimización, derivados de imágenes, validación, sala provisional
 docs/          especificación y decisiones
+blender/       archivos fuente de Blender (.blend y GLB de trabajo, sin versionar); ver docs/especificacion.md, sección 10.1
 README.md      guía de uso y contrato con Blender
 ```
 

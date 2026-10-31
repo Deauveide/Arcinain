@@ -192,6 +192,14 @@ Todos los scripts se documentan en el README al implementarse.
 - Evitar la suspensión del computador durante la muestra.
 - GitHub Pages solo para el visor, con sus límites (≈ 1 GB por sitio, 100 MB por archivo). Git LFS no sirve para Pages.
 
+## 10.1 Flujo de trabajo con Blender
+
+- **Archivos fuente:** los `.blend` de trabajo viven en `blender/` dentro del proyecto (ej.: `blender/Modulo museo.blend`).
+- **Qué se versiona:** solo el GLB que usa el visor, `viewer/assets/models/sala.glb`. Los `.blend` y los `.glb` de trabajo dentro de `blender/` están ignorados por Git.
+- **Dónde trabajar:** el modelado y las exportaciones con el MCP de Blender se hacen desde esta sesión de Claude Code, no desde chats separados.
+- **Referencias:** capturas, planos y medidas de referencia van a una carpeta de referencias que el usuario creará cuando la necesite. Hasta entonces no existe.
+- **Exportación:** cada exportación para el visor sigue la sección 6 del README (glTF Binary, +Y Up, sin Draco ni Meshopt) y se escribe en `viewer/assets/models/sala.glb`.
+
 ## 11. Fases y criterios de aceptación
 
 Al final de cada fase, **se detiene el trabajo para que el usuario pruebe**.
