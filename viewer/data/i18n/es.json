@@ -30,5 +30,8 @@
     "texturas": "Texturas en memoria",
     "colisiones": "Ver colisiones",
     "marcadores": "Ver marcadores"
+  },
+  "obras": {
+    "marcador": "Obra"
   }
 }

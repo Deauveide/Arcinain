@@ -4,7 +4,7 @@
 
 import * as THREE from 'three';
 import { cargarIdioma, t, aplicarTraducciones } from './i18n.js';
-import { cargarSala, crearMarcadoresObra, crearMarcadoresParada } from './scene.js';
+import { cargarSala, crearMarcadoresObra, crearMarcadoresParada, aplicarImagenObra } from './scene.js';
 import { Navegacion } from './navigation.js';
 import { crearDebug } from './debug.js';
 
@@ -107,6 +107,15 @@ async function iniciar() {
   escena.add(datos.raiz);
   crearMarcadoresObra(datos);
   crearMarcadoresParada(datos);
+  // Prueba de exposición: ?poster=1 pone el poster de prueba en OBRA_01.
+  // Es temporal y no registra nada en recorrido.json ni en obras.json.
+  if (parametros.get('poster') === '1') {
+    try {
+      await aplicarImagenObra(datos, 'OBRA_01', './assets/obras/full/poster-prueba.png');
+    } catch (error) {
+      console.error('[prueba] No se pudo aplicar el poster:', error);
+    }
+  }
   $('barra-progreso').style.width = '100%';
   mostrarEstado(t('carga.lista'));
   $('btn-entrar').disabled = false;

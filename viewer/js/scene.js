@@ -10,6 +10,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+import { t } from './i18n.js';
 
 const RE_OBRA = /^OBRA_\d+$/;
 const RE_PARADA = /^PARADA_\d+$/;
@@ -110,7 +111,8 @@ export function crearMarcadoresObra(datos, anchoM = 1.0, altoM = 0.7) {
     ctx.font = 'bold 64px system-ui, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(codigo, lienzo.width / 2, lienzo.height / 2);
+    // Texto genérico ("Obra"), sin el código: el código sigue en el nombre del nodo (contrato).
+    ctx.fillText(t('obras.marcador'), lienzo.width / 2, lienzo.height / 2);
 
     const textura = new THREE.CanvasTexture(lienzo);
     textura.colorSpace = THREE.SRGBColorSpace;
@@ -129,6 +131,26 @@ export function crearMarcadoresObra(datos, anchoM = 1.0, altoM = 0.7) {
 
   datos.raiz.add(grupo);
   return grupo;
+}
+
+/**
+ * Pone una imagen real en el marcador de una obra (prueba de exposición).
+ * Conserva la altura del marcador y ajusta el ancho a la proporción de la imagen,
+ * para no estirarla. No toca obras.json ni recorrido.json.
+ * @returns {Promise<void>} Resuelve cuando la imagen ya está aplicada.
+ */
+export async function aplicarImagenObra(datos, codigo, url, altoM = 0.7) {
+  const plano = datos.raiz.getObjectByName(`marcador_${codigo}`);
+  if (!plano) throw new Error(`No existe el marcador de ${codigo}.`);
+
+  const textura = await new THREE.TextureLoader().loadAsync(url);
+  textura.colorSpace = THREE.SRGBColorSpace;
+
+  const { width, height } = textura.image;
+  plano.material.map = textura;
+  plano.material.needsUpdate = true;
+  // La geometría base mide 1 m de ancho; se escala en X para la proporción real.
+  plano.scale.x = (altoM * (width / height)) / 1.0;
 }
 
 /**
