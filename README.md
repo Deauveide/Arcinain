@@ -34,13 +34,15 @@ viewer/
   js/xr.js           WebXR, teletransporte, confort
   js/router.js       enlaces directos por URL
   js/i18n.js         textos de la interfaz
-  data/obras.json
-  data/recorrido.json
+  data/obras.json      generado por tools:obras (no editar a mano)
+  data/modulos.json    generado
+  data/recorrido.json  generado
   data/i18n/es.json
   assets/models/     sala.glb (y proxies de colisión si se separan)
   assets/obras/thumbs/ | web/ | full/
   assets/audio/
   vendor/            librerías con versión fija
+contenido/           FUENTE DE VERDAD: fichas, módulos, recorrido, imágenes y audios (ver "Cómo agregar y modificar obras")
 server/              backend opcional (fase 7)
 tools/               scripts de optimización y validación
 docs/                especificación y decisiones
@@ -67,6 +69,55 @@ Parámetros del visor (en la URL):
 
 ---
 
+## Cómo agregar y modificar obras
+
+> **Estado:** diseño aprobado (3/11/2026); `tools:obras` y `tools:validar` se implementan en la fase 2. Detalle completo en [`docs/especificacion.md`](docs/especificacion.md), sección 4.
+
+Todo el contenido se escribe en `contenido/` y se publica al visor con un solo comando. **Nunca se editan a mano** los JSON de `viewer/data/`.
+
+```
+contenido/
+  museo.md          nombre, bienvenida, tiempos del kiosco
+  recorrido.md      orden del recorrido guiado
+  modulo1/
+    modulo.md       título + introducción escrita
+    intro.ogg       narración del módulo (opcional)
+    OBRA_01/
+      ficha.md      datos + descripción
+      imagen.jpg    versión liviana de la obra
+      audio.ogg     opcional
+      modelo.glb    opcional (esculturas)
+  modulo2/ …
+```
+
+**Agregar una obra:** colocar `OBRA_xx` y `PARADA_xx` en Blender dentro del módulo → copiar una carpeta de obra y renombrarla → llenar `ficha.md` y cambiar la imagen → `npm run tools:obras` → `npm run tools:validar`.
+
+**Modificar:** editar `ficha.md` o reemplazar sus archivos y volver a ejecutar `tools:obras`.
+
+**Quitar:** borrar la carpeta (y su línea en `recorrido.md`) y volver a ejecutar `tools:obras`.
+
+**Ficha mínima (`ficha.md`):**
+
+```
+---
+titulo: Título de la obra
+artista: Nombre del artista
+anio: 1978
+tecnica: Óleo sobre tela
+alto_m: 0.90
+ancho_m: 0.70
+---
+Descripción en texto libre.
+```
+
+**Orden del tour (`recorrido.md`):** una línea por parada: `modulo1` (introducción del módulo) u `OBRA_03` (esa obra). Mover una línea cambia el orden; no se renombra nada.
+
+**Narración:** la de cada módulo suena al entrar (continúa donde quedó si saliste a mitad; al terminar no se repite sola, y un botón la repite). El audio de una obra solo suena con "Escuchar".
+
+Los originales pesados (TIFF/PSD/RAW) se quedan en `Museo-originales/`, fuera del repositorio.
+
+---
+
 ## Contrato con el modelo de Blender
 
 Esta sección es el contrato entre el modelado en Blender y el código. Si algo aquí cambia, cambia también el código que lo lee.
@@ -86,22 +137,27 @@ Los nombres son sensibles a mayúsculas y no pueden repetirse. Sin espacios, sin
 |---|---|---|
 | `SPAWN` | Empty (Plain Axes) | Punto de inicio de la visita. Su +Y local define el frente inicial. |
 | `OBRA_01`, `OBRA_02`… | Empty (Plain Axes) (recomendado) o plano | Posición y orientación de cada obra. |
-| `PARADA_01`, `PARADA_02`… | Empty (Plain Axes) | Puntos de teletransporte y paradas del recorrido guiado. |
+| `PARADA_01`, `PARADA_02`… | Empty (Plain Axes) | Punto desde donde se ve la obra con el mismo número (`PARADA_07` ↔ `OBRA_07`). Teletransporte y parada del recorrido guiado. |
+| `ZONA_modulo1`, `ZONA_modulo2`… | Malla caja (invisible en el visor) o empty con escala | Volumen que cubre el espacio navegable de un módulo. Al entrar se dispara su narración. Una obra pertenece al módulo cuya zona contiene su `OBRA_xx`. |
+| `PARADA_modulo1`, `PARADA_modulo2`… | Empty (Plain Axes) | Punto donde el tour deja al visitante para la introducción del módulo. Uno por módulo, dentro de su zona. |
 | `COL_*` | Malla simple | Colisiones. Se ocultan en el visor. Ej.: `COL_muro_norte`. |
 | `PISO_*` | Malla | Superficies caminables y destino de teletransporte. Ej.: `PISO_sala1`. |
-| `ZONA_*` | Colección o empty padre (opcional) | Agrupación por sala para carga progresiva. Ej.: `ZONA_01`. |
 
 Cualquier otro objeto se exporta y se renderiza como parte de la arquitectura. No hace falta nombrar nada más.
 
-**Colecciones:** Blender exporta los objetos por nombre, no por colección. Las colecciones sirven para organizar la escena, pero el visor no las lee. Los `ZONA_*` sí deben existir como objeto (empty padre) si se quiere carga por zona.
+**Módulos.** Todo el museo va en **un solo `sala.glb`** (D-27). Cada módulo necesita su `ZONA_moduloN` y su `PARADA_moduloN`, y el `N` coincide con la carpeta `contenido/moduloN/`. Las obras se numeran de forma **global** (`OBRA_01`…`OBRA_24`) aunque estén en módulos distintos: el número es un ID estable, no una posición. Las zonas de módulos vecinos no deben solaparse más de lo necesario (un pasillo compartido dispara el módulo cuyo volumen lo contiene primero).
+
+**Colecciones:** Blender exporta los objetos por nombre, no por colección. Las colecciones sirven para organizar la escena, pero el visor no las lee.
+
+**Estado de transición (D-26).** Mientras el módulo de Blender no se exporte con estos nombres, `tools/adaptar-modulo.mjs` asigna `OBRA_01…08` y `PARADA_0N` al único módulo actual. Los nodos `ZONA_moduloN` y `PARADA_moduloN` se añadirán cuando se defina la geometría de los módulos.
 
 ### 3. Obras: cómo se colocan
 
 - El **empty `OBRA_xx`** define **posición** y **orientación**. Su **+Y local** apunta hacia el interior de la sala (hacia donde se para el visitante para mirar la obra).
 - La **cara frontal** de la obra es la que mira hacia ese lado.
-- El **tamaño** no sale del empty: sale de `dimensiones` en `obras.json`, en metros. Así la obra siempre tiene su medida real aunque el empty tenga escala distinta de 1.
+- El **tamaño** no sale del empty: sale de `alto_m` y `ancho_m` de su `ficha.md`, en metros. Así la obra siempre tiene su medida real aunque el empty tenga escala distinta de 1.
 - La **escala del nodo `OBRA_xx` se ignora** por diseño. No aplicar escalas a los empties.
-- Para obras tridimensionales (esculturas): el objeto puede tener un GLB propio referenciado en `obras.json` (`modelo3d`). Su origen debe estar en la base.
+- Para obras tridimensionales (esculturas): el objeto puede tener un GLB propio: basta con poner `modelo.glb` en la carpeta de la obra y `tipo: escultura` en su ficha. Su origen debe estar en la base.
 
 ### 4. Luz horneada (lightmaps)
 
@@ -165,6 +221,7 @@ Se usa el **exportador glTF 2.0 integrado en Blender** (*File → Export → glT
 - [ ] Arquitectura con escala 1 y rotación 0 (transformaciones aplicadas). Empties sin aplicar.
 - [ ] Nombres exactos según la sección 2, sin duplicados, sin espacios, tildes ni sufijos `.001`.
 - [ ] Existe `SPAWN`. Existen `OBRA_01`… y `PARADA_01`… con las cantidades previstas.
+- [ ] Cada módulo tiene su `ZONA_moduloN` y su `PARADA_moduloN`, y cada `OBRA_xx` queda dentro de la zona que le corresponde.
 - [ ] Los `COL_*` y `PISO_*` están visibles en el viewport (la exportación usa *Visible Objects*).
 - [ ] Cada malla horneada tiene UV1 y, si se usa camino B, UV2 sin solapes.
 - [ ] Materiales simples: un material por zona; en el camino A, la textura horneada conectada al color base.
@@ -207,7 +264,7 @@ Antes de modelar el museo, construir una **escena mínima** para validar el fluj
   - **Miniatura** (≈ 512 px): catálogo y listados.
   - **Web** (≈ 2048 px, WebP o JPG de alta calidad): en la sala. Mipmaps y filtrado anisotrópico.
   - **Full** (original o casi): solo en el modo detalle, con zoom y arrastre, cargada bajo demanda.
-- Las imágenes se generan desde los originales con `tools/` (sharp), conservando el perfil de color.
+- Las imágenes se generan desde la `imagen` de cada carpeta de obra con `tools:obras` (sharp), conservando el perfil de color.
 
 ## Originales fuera del repositorio
 
@@ -256,7 +313,7 @@ Verificadas el 31/10/2026 con `npm view`. Solo se usan versiones con al menos do
 ## Backend (opcional, `server/`)
 
 - **Fastify** sirve `/viewer` con compresión, caché adecuada, soporte de rangos HTTP para audio y MIME correctos (`.glb`, `.ktx2`, `.wasm`).
-- **Panel de administración** (solo en localhost por defecto) para editar `obras.json` y `recorrido.json`, subir imágenes y audios.
+- **Panel de administración** (solo en localhost por defecto) para editar fichas, módulos y el recorrido (escribe en `contenido/`), subir imágenes y audios.
 - **Estadísticas anónimas:** visitas, obras más vistas, uso del recorrido. Sin datos personales ni cookies de seguimiento.
 - **Seguridad:**
   - Validación de tipo y tamaño de archivos subidos, nombres saneados.

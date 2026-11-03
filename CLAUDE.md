@@ -27,7 +27,8 @@ Especificación completa: `docs/especificacion.md`. Decisiones y su estado: `doc
 ## Estructura
 ```
 viewer/        visor estático (Three.js, WebXR)
-  index.html, css/, js/, data/ (obras.json, recorrido.json, i18n/), assets/, vendor/
+  index.html, css/, js/, data/ (obras.json, modulos.json, recorrido.json: GENERADOS; i18n/), assets/, vendor/
+contenido/     fuente de verdad del contenido: museo.md, recorrido.md, moduloN/ (modulo.md, intro.ogg, OBRA_xx/ficha.md + imagen + audio) — ver docs/especificacion.md, sección 4
 server/        backend opcional (Fastify) — fase 7
 tools/         scripts Node: optimización, derivados de imágenes, validación, sala provisional
 docs/          especificación y decisiones
@@ -45,12 +46,13 @@ README.md      guía de uso y contrato con Blender
 
 ## Estado
 - **Fase 0 (especificación): completada y confirmada por el usuario** (31/10/2026). Repositorio: https://github.com/Deauveide/Arcinain (remoto `origin` configurado, sin commits).
-- **Fase 1 (base del visor): implementada, pendiente de prueba del usuario.** Probada en headless: escritorio (movimiento, giro, colisiones) y celular (joystick, arrastre, tocar piso y paradas).
+- **Fase 1 (base del visor): implementada; el usuario la probó y reporta que las colisiones están mal** (D-34, sin diagnosticar; se retoma con la geometría de los módulos).
+- **Replanteo de módulos y contenido (3/11/2026): diseño aprobado y escrito** en `docs/especificacion.md` (secciones 4, 5, 6.3), README y `decisiones.md` (D-27 a D-34). Un solo `sala.glb` con módulos `ZONA_moduloN`; contenido en `contenido/` (una carpeta por obra, `ficha.md`); narración de módulo con reanudación; tour único en `recorrido.md`. **Falta definir la geometría de los módulos** y que el usuario revise estos documentos. El código de `viewer/js/` aún no refleja nada de esto.
 - Fases 2–7: pendientes.
 
 ## Datos del usuario (confirmados)
 - Tiene dominio propio (nombre por confirmar) para el túnel de Cloudflare (fase 7).
-- Las obras ya están digitalizadas; el formato aún no está definido. Los datos se recogen en `docs/obras-tabla.csv` (plantilla).
+- Las obras ya están digitalizadas; el formato de los originales aún no está definido. Los datos van en `contenido/moduloN/OBRA_xx/ficha.md` (el CSV `docs/obras-tabla.csv` queda reemplazado, D-28).
 - Voz en off en español; por ahora audios de prueba.
 - Modelo de Quest: aún no definido.
 - Modelado en **Blender** (no 3ds Max).
