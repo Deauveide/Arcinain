@@ -14,7 +14,7 @@ Especificación completa: `docs/especificacion.md`. Decisiones y su estado: `doc
 ## Reglas de trabajo
 1. **Por fases.** Se trabaja en las fases 1 a 7 de `docs/especificacion.md`. Al terminar cada una, paro, digo qué probar y espero la confirmación del usuario antes de iniciar la siguiente.
 2. **Sin commits ni push sin pedirlo.** No crear commits por iniciativa propia.
-3. **Originales pesados fuera del repo.** Los TIFF/PSD/RAW de obras y los archivos `.blend` pesados no entran al repositorio. Ruta prevista: `C:\Users\Davi\Documents\Antigravity\Museo-originales\` (ver `README.md`).
+3. **Se versiona todo lo que está en la carpeta del proyecto (D-35).** Incluye `blender/` (`.blend` y GLB de trabajo), `node_modules/` y `.claude/`. Única excepción en `.gitignore`: `server/.env` (secretos). Los originales TIFF/PSD/RAW de obras viven fuera de la carpeta del proyecto, por el límite de 100 MB por archivo de GitHub: `C:\Users\Davi\Documents\Antigravity\Museo-originales\` (ver `README.md`).
 4. **Versiones de librerías.** Fijadas con versión exacta. Antes de fijar una, verificar con `npm view <paquete> time --json` que la versión tenga **al menos dos semanas** de publicada. No usar `latest` ni rangos.
 5. **Sin paso de build para el visor.** HTML, CSS y JS vanilla, módulos ES con `importmap`. Librerías en `viewer/vendor/` con rutas locales.
 6. **Sin dependencias de terceros en runtime** (fuentes, CDN, analítica). Todo se sirve desde el propio dominio.
@@ -32,7 +32,7 @@ contenido/     fuente de verdad del contenido: museo.md, recorrido.md, moduloN/ 
 server/        backend opcional (Fastify) — fase 7
 tools/         scripts Node: optimización, derivados de imágenes, validación, sala provisional
 docs/          especificación y decisiones
-blender/       archivos fuente de Blender (.blend y GLB de trabajo, sin versionar); ver docs/especificacion.md, sección 10.1
+blender/       archivos fuente de Blender (.blend y GLB de trabajo, versionados); ver docs/especificacion.md, sección 10.1
 README.md      guía de uso y contrato con Blender
 ```
 

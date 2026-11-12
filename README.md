@@ -114,7 +114,7 @@ Descripción en texto libre.
 
 **Narración:** la de cada módulo suena al entrar (continúa donde quedó si saliste a mitad; al terminar no se repite sola, y un botón la repite). El audio de una obra solo suena con "Escuchar".
 
-Los originales pesados (TIFF/PSD/RAW) se quedan en `Museo-originales/`, fuera del repositorio.
+Los originales pesados (TIFF/PSD/RAW) se quedan en `Museo-originales/`, fuera de la carpeta del proyecto (GitHub no acepta archivos de más de 100 MB). Todo lo demás se versiona, incluidos `blender/` y `node_modules/`; solo `server/.env` está ignorado (D-35).
 
 ---
 

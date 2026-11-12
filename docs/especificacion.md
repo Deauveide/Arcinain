@@ -264,7 +264,7 @@ Todos los scripts se documentan en el README al implementarse. `docs/obras-tabla
 ## 10.1 Flujo de trabajo con Blender
 
 - **Archivos fuente:** los `.blend` de trabajo viven en `blender/` dentro del proyecto (ej.: `blender/Modulo museo.blend`).
-- **Qué se versiona:** solo el GLB que usa el visor, `viewer/assets/models/sala.glb`. Los `.blend` y los `.glb` de trabajo dentro de `blender/` están ignorados por Git.
+- **Qué se versiona:** todo (D-35): los `.blend` y los `.glb` de trabajo de `blender/` y el GLB que usa el visor, `viewer/assets/models/sala.glb`. Ningún archivo puede pasar de 100 MB (límite de GitHub).
 - **Dónde trabajar:** el modelado y las exportaciones con el MCP de Blender se hacen desde esta sesión de Claude Code, no desde chats separados.
 - **Referencias:** capturas, planos y medidas de referencia van a una carpeta de referencias que el usuario creará cuando la necesite. Hasta entonces no existe.
 - **Exportación:** cada exportación para el visor sigue la sección 6 del README (glTF Binary, +Y Up, sin Draco ni Meshopt) y se escribe en `viewer/assets/models/sala.glb`.

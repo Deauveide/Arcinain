@@ -39,6 +39,7 @@ Estado: **Propuesta** (pendiente de confirmación del usuario), **Confirmada** o
 | D-32 | Recorrido guiado | Un solo recorrido continuo por todos los módulos, definido en `contenido/recorrido.md` (una línea por parada: `moduloN` u `OBRA_xx`), con "Recorrer solo este módulo". Reutiliza los audios existentes; durante el tour las narraciones por zona se desactivan. Los tiempos de pausa (`pausa_entre_paradas_s`, `pausa_sin_audio_s`) y el kiosco (D-17) pasan a `museo.md`. | Confirmada por el usuario (3/11/2026); tiempos propuestos |
 | D-33 | Identificadores | Obras con numeración global (`OBRA_01`…); el ID es estable y el módulo lo define la zona que contiene el nodo en Blender. La carpeta debe coincidir con esa zona (lo comprueba `tools:validar`). El orden del tour es independiente del número. | Confirmada por el usuario (3/11/2026) |
 | D-34 | Colisiones (Fase 1) | El usuario reporta en la prueba de la Fase 1 que **las colisiones están mal**. Sin diagnosticar. Se resuelve antes de cerrar la Fase 1, con la geometría ya definida. | Pendiente |
+| D-35 | Qué entra al repositorio | Se versiona todo lo que está en la carpeta del proyecto, incluidos `blender/`, `node_modules/` y `.claude/`. `.gitignore` solo excluye `server/.env`. Los originales pesados de obras siguen fuera de la carpeta (`Museo-originales/`) por el límite de 100 MB por archivo de GitHub. | Confirmada por el usuario (11/11/2026) |
 
 ---
 
