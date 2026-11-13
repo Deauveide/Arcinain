@@ -3,10 +3,11 @@
 //               ratón con puntero bloqueado para mirar.
 //   Celular:    joystick virtual (izquierda) para moverse; arrastrar (derecha) para mirar;
 //               tocar el piso o una parada para ir allí.
-// El movimiento se comprueba contra las cajas de COL_* (colisiones) con deslizamiento por ejes.
+// El movimiento se comprueba contra los triángulos de COL_* (colisiones.js), con deslizamiento.
 
 import * as THREE from 'three';
 import { guinadaDeDireccion, direccionDeMirada } from './scene.js';
+import { mover } from './colisiones.js';
 
 const VELOCIDAD = 2.2;          // m/s al caminar
 const VELOCIDAD_CORRER = 3.4;   // m/s con Mayús
@@ -103,9 +104,13 @@ export class Navegacion {
       const dx = (-seno * az + coseno * ax) * velocidad * paso;
       const dz = (-coseno * az - seno * ax) * velocidad * paso;
 
-      // Deslizamiento: probar cada eje por separado para no quedarse pegado a una pared
-      if (!this._colisiona(this.posicion.x + dx, this.posicion.z)) this.posicion.x += dx;
-      if (!this._colisiona(this.posicion.x, this.posicion.z + dz)) this.posicion.z += dz;
+      // Colisión contra los triángulos de COL_*, con deslizamiento a lo largo de las paredes
+      const [nx, nz] = mover(
+        this.datos.triangulosColision, this.posicion.x, this.posicion.z, dx, dz,
+        RADIO_CUERPO, this.suelo + 0.1, this.suelo + ALTURA_CUERPO,
+      );
+      this.posicion.x = nx;
+      this.posicion.z = nz;
     }
 
     this.suelo = this._sueloEn(this.posicion.x, this.posicion.z);
@@ -119,20 +124,6 @@ export class Navegacion {
     this.posicion.y = this.suelo;
     this.camara.position.set(this.posicion.x, this.suelo + ALTURA_OJOS, this.posicion.z);
     this.camara.quaternion.setFromEuler(new THREE.Euler(this.pitch, this.yaw, 0, 'YXZ'));
-  }
-
-  /** ¿El cuerpo del visitante en (x, z) choca con alguna caja de colisión? */
-  _colisiona(x, z) {
-    const baseY = this.suelo + 0.1;
-    const topeY = this.suelo + ALTURA_CUERPO;
-    for (const caja of this.datos.cajasColision) {
-      if (caja.max.y < baseY || caja.min.y > topeY) continue;
-      if (x > caja.min.x - RADIO_CUERPO && x < caja.max.x + RADIO_CUERPO &&
-          z > caja.min.z - RADIO_CUERPO && z < caja.max.z + RADIO_CUERPO) {
-        return true;
-      }
-    }
-    return false;
   }
 
   /** Altura del piso bajo (x, z), buscando hacia abajo entre las mallas PISO_*. */

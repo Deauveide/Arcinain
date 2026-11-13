@@ -1,7 +1,11 @@
-// Adapta el módulo de Blender al contrato del visor y escribe viewer/assets/models/sala.glb.
+// OBSOLETO (D-36): el museo de 4 cúpulas sale de blender/Museo cupulas.blend con los nombres
+// del contrato ya puestos. Este script se conserva solo como referencia de la cúpula única y
+// NUNCA escribe sala.glb: su salida es un archivo aparte, que se ve con ?sala=sala-modulo-unico.glb.
+//
+// Adapta el módulo de Blender al contrato del visor.
 //
 // Entrada:  blender/Modulo museo.glb   (exportación del módulo; NO se modifica)
-// Salida:   viewer/assets/models/sala.glb
+// Salida:   viewer/assets/models/sala-modulo-unico.glb
 //
 // PROVISIONAL: el módulo aún no trae los nodos del contrato (SPAWN, OBRA_xx, PARADA_xx,
 // COL_*, PISO_*). Este script los añade a partir de los paneles y del piso del módulo.
@@ -11,9 +15,9 @@
 //   - OBRA_01…OBRA_08 = los 8 paneles grandes Panel_N.001 (1,3 m), uno por cara de la sala.
 //   - Cada OBRA copia la posición y la orientación del panel; su -Z apunta a la sala.
 //   - PARADA_0N está a 2,5 m delante de OBRA_0N, mirando hacia la obra.
-//   - COL_*: cuatro muros interiores (espesor 0,2 m, dentro del revestimiento) y la banca.
+//   - COL_*: ocho muros interiores en octógono (espesor 0,2 m, dentro del revestimiento) y la banca.
 //
-// Uso: npm run tools:modulo
+// Uso: npm run tools:modulo-unico
 
 import { Document, NodeIO } from '@gltf-transform/core';
 import { KHRMaterialsTransmission } from '@gltf-transform/extensions';
@@ -22,13 +26,17 @@ import { fileURLToPath } from 'node:url';
 
 const RAIZ = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const ENTRADA = resolve(RAIZ, 'blender/Modulo museo.glb');
-const SALIDA = resolve(RAIZ, 'viewer/assets/models/sala.glb');
+// Nunca sala.glb: ese archivo es el museo completo (D-36)
+const SALIDA = resolve(RAIZ, 'viewer/assets/models/sala-modulo-unico.glb');
 
 const DISTANCIA_PARADA = 2.5;      // m, desde la obra hasta la parada
 const SEPARACION_OBRA = 0.021;     // m, para que la obra quede justo delante del panel (grosor 0,04)
 const ALTURA_MURO = 4.2;           // m, altura del revestimiento interior
 const ESPESOR_MURO = 0.2;          // m
-const BORDE_INTERIOR = 5.4;        // m, centro del muro de colisión (la cara interior queda en 5.3)
+const BORDE_INTERIOR = 5.4;        // m, apotema del centro del muro de colisión (la cara interior queda en 5.3)
+// Lado del octógono interior (apotema 5,5): 2·5,5·tan 22,5° ≈ 4,56 m. Se alarga un poco
+// para que los muros vecinos se solapen en las esquinas y no quede rendija.
+const LARGO_MURO = 4.9;            // m
 
 // ---------------------------------------------------------------- cuaterniones [x, y, z, w]
 
@@ -130,19 +138,25 @@ async function main() {
   // 3) Punto de inicio: centro-sur de la sala, mirando hacia la sala (-Z)
   escena.addChild(doc.createNode('SPAWN').setTranslation([0, 0, 3.0]).setRotation([0, 0, 0, 1]));
 
-  // 4) Colisiones: cuatro muros interiores y la banca
+  // 4) Colisiones: ocho muros interiores (la sala es un octógono, D-34) y la banca
   // Un GLB admite un único buffer: reutilizamos el del módulo
   const buffer = raiz.listBuffers()[0] ?? doc.createBuffer();
   const material = doc.createMaterial('MAT_colision_invisible').setBaseColorFactor([1, 0, 0, 0.2]);
-  const muros = [
-    { nombre: 'COL_muro_norte', c: [0, ALTURA_MURO / 2, -BORDE_INTERIOR], s: [11.0, ALTURA_MURO, ESPESOR_MURO] },
-    { nombre: 'COL_muro_sur', c: [0, ALTURA_MURO / 2, BORDE_INTERIOR], s: [11.0, ALTURA_MURO, ESPESOR_MURO] },
-    { nombre: 'COL_muro_este', c: [BORDE_INTERIOR, ALTURA_MURO / 2, 0], s: [ESPESOR_MURO, ALTURA_MURO, 11.0] },
-    { nombre: 'COL_muro_oeste', c: [-BORDE_INTERIOR, ALTURA_MURO / 2, 0], s: [ESPESOR_MURO, ALTURA_MURO, 11.0] },
-  ];
-  for (const m of muros) {
-    escena.addChild(doc.createNode(m.nombre).setMesh(mallaCaja(doc, buffer, m.nombre, material, ...m.s)).setTranslation(m.c));
-  }
+  // Muro k: girado k·45° en Y; su centro está a BORDE_INTERIOR del centro de la sala.
+  // k = 0 es el norte (-Z) y se avanza en sentido antihorario visto desde arriba.
+  const orientaciones = ['norte', 'noroeste', 'oeste', 'suroeste', 'sur', 'sureste', 'este', 'noreste'];
+  orientaciones.forEach((orientacion, k) => {
+    const angulo = (k * Math.PI) / 4;
+    const nombre = `COL_muro_${orientacion}`;
+    const centro = [-BORDE_INTERIOR * Math.sin(angulo), ALTURA_MURO / 2, -BORDE_INTERIOR * Math.cos(angulo)];
+    const rotacion = [0, Math.sin(angulo / 2), 0, Math.cos(angulo / 2)];
+    escena.addChild(
+      doc.createNode(nombre)
+        .setMesh(mallaCaja(doc, buffer, nombre, material, LARGO_MURO, ALTURA_MURO, ESPESOR_MURO))
+        .setTranslation(centro)
+        .setRotation(rotacion),
+    );
+  });
 
   // La banca del módulo es una caja de escala (1,8 × 0,44 × 0,45) con origen en su centro, a y = 0,22
   const banca = nodos.get('Banca') ?? falta('Banca');
@@ -158,7 +172,7 @@ async function main() {
 
   console.log(`Módulo adaptado → ${SALIDA}`);
   console.log(resumen.join('\n'));
-  console.log('Nodos del contrato: SPAWN, OBRA_01…08, PARADA_01…08, COL_muro_* (4), COL_banca, PISO_sala1');
+  console.log('Nodos del contrato: SPAWN, OBRA_01…08, PARADA_01…08, COL_muro_* (8), COL_banca, PISO_sala1');
 }
 
 main().catch((error) => {

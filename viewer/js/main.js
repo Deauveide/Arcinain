@@ -22,6 +22,21 @@ const PERFILES = {
   alto: { pixelRatio: 2.0, lejos: 150 },
 };
 
+// Campo de visión vertical (Three.js), en grados (D-24). 55° con la pantalla apaisada da unos 88° de ancho
+// en 16:9, cercano a la vista natural; con la pantalla en vertical (aspecto < 0,8) se abre para no perder los lados.
+// En pantallas muy anchas se limita además el campo horizontal, para no deformar los bordes.
+const FOV_APAISADO = 55;
+const FOV_RETRATO = 75;
+const FOV_HORIZONTAL_MAX = 90;
+
+/** FOV vertical para un aspecto (ancho / alto) dado. */
+function fovPara(aspecto) {
+  if (aspecto < 0.8) return FOV_RETRATO;
+  const mitadHorizontal = THREE.MathUtils.degToRad(FOV_HORIZONTAL_MAX / 2);
+  const topeVertical = THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(mitadHorizontal) / aspecto));
+  return Math.min(FOV_APAISADO, topeVertical);
+}
+
 const $ = (id) => document.getElementById(id);
 
 // Detección de dispositivo: un puntero "grueso" o pantalla táctil = celular
@@ -81,7 +96,7 @@ async function iniciar() {
   const escena = new THREE.Scene();
   escena.background = new THREE.Color(0x16171a);
 
-  const camara = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.05, perfil.lejos);
+  const camara = new THREE.PerspectiveCamera(FOV_APAISADO, window.innerWidth / window.innerHeight, 0.05, perfil.lejos);
 
   // Luces mínimas y sin sombras: la arquitectura provisional lo necesita para verse; el modelo real usará luz horneada.
   escena.add(new THREE.HemisphereLight(0xffffff, 0x444444, 1.6));
@@ -137,12 +152,12 @@ async function iniciar() {
   if (ES_DEBUG) window.__visor = { nav, camara, datos };
 
   // Ajuste al cambiar el tamaño de la ventana (también al girar el celular).
-  // En vertical el FOV (vertical en Three.js) se amplía para no perder el campo lateral.
+  // El FOV depende del aspecto (ver fovPara).
   const ajustarCamara = () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     const aspecto = window.innerWidth / window.innerHeight;
     camara.aspect = aspecto;
-    camara.fov = aspecto < 0.8 ? 80 : 70;
+    camara.fov = fovPara(aspecto);
     camara.updateProjectionMatrix();
   };
   ajustarCamara();

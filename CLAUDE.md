@@ -46,8 +46,8 @@ README.md      guía de uso y contrato con Blender
 
 ## Estado
 - **Fase 0 (especificación): completada y confirmada por el usuario** (31/10/2026). Repositorio: https://github.com/Deauveide/Arcinain (remoto `origin` configurado, sin commits).
-- **Fase 1 (base del visor): implementada; el usuario la probó y reporta que las colisiones están mal** (D-34, sin diagnosticar; se retoma con la geometría de los módulos).
-- **Replanteo de módulos y contenido (3/11/2026): diseño aprobado y escrito** en `docs/especificacion.md` (secciones 4, 5, 6.3), README y `decisiones.md` (D-27 a D-34). Un solo `sala.glb` con módulos `ZONA_moduloN`; contenido en `contenido/` (una carpeta por obra, `ficha.md`); narración de módulo con reanudación; tour único en `recorrido.md`. **Falta definir la geometría de los módulos** y que el usuario revise estos documentos. El código de `viewer/js/` aún no refleja nada de esto.
+- **Fase 1 (base del visor): implementada.** Colisiones (D-34) arregladas el 11/11/2026 (sala octogonal, colisión por triángulos) y FOV reducido (D-24); falta que el usuario lo pruebe.
+- **Replanteo de módulos y contenido (3/11/2026): diseño aprobado y escrito** en `docs/especificacion.md` (secciones 4, 5, 6.3), README y `decisiones.md` (D-27 a D-34). Un solo `sala.glb` con módulos `ZONA_moduloN`; contenido en `contenido/` (una carpeta por obra, `ficha.md`); narración de módulo con reanudación; tour único en `recorrido.md`. Geometría definida el 13/11/2026 (D-36): 4 cúpulas en cruz con pasillos en `blender/Museo cupulas.blend`, exportadas directo a `sala.glb` (25 obras, tótem curatorial `CURATORIAL_moduloN`, D-37). Pendiente en el visor: marcos, ficha a la izquierda, luz cálida y texto del tótem (D-38, D-39). Falta que el usuario revise estos documentos. El código de `viewer/js/` aún no refleja nada de esto.
 - Fases 2–7: pendientes.
 
 ## Datos del usuario (confirmados)

@@ -9,7 +9,8 @@
   },
   "scripts": {
     "tools:sala": "node tools/generar-sala-provisional.mjs",
-    "tools:modulo": "node tools/adaptar-modulo.mjs",
+    "tools:modulo-unico": "node tools/adaptar-modulo.mjs",
+    "tools:colisiones": "node tools/probar-colisiones.mjs",
     "viewer": "node tools/servir-visor.mjs"
   },
   "devDependencies": {

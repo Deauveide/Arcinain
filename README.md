@@ -52,7 +52,8 @@ docs/                especificación y decisiones
 
 ```bash
 npm install            # instala @gltf-transform (solo para tools/)
-npm run tools:modulo   # adapta blender/Modulo museo.glb → viewer/assets/models/sala.glb (sala real, provisional en contrato)
+npm run tools:modulo-unico   # OBSOLETO (D-36): cúpula única de referencia → viewer/assets/models/sala-modulo-unico.glb (nunca toca sala.glb)
+npm run tools:colisiones  # comprueba que desde SPAWN no se pueda salir de la sala ni atravesar un COL_*
 npm run tools:sala     # regenera viewer/assets/models/sala-provisional.glb (sala de prueba generada por código)
 npm run viewer         # sirve viewer/ en http://localhost:8080
 ```
@@ -140,6 +141,7 @@ Los nombres son sensibles a mayúsculas y no pueden repetirse. Sin espacios, sin
 | `PARADA_01`, `PARADA_02`… | Empty (Plain Axes) | Punto desde donde se ve la obra con el mismo número (`PARADA_07` ↔ `OBRA_07`). Teletransporte y parada del recorrido guiado. |
 | `ZONA_modulo1`, `ZONA_modulo2`… | Malla caja (invisible en el visor) o empty con escala | Volumen que cubre el espacio navegable de un módulo. Al entrar se dispara su narración. Una obra pertenece al módulo cuya zona contiene su `OBRA_xx`. |
 | `PARADA_modulo1`, `PARADA_modulo2`… | Empty (Plain Axes) | Punto donde el tour deja al visitante para la introducción del módulo. Uno por módulo, dentro de su zona. |
+| `CURATORIAL_modulo1`, `CURATORIAL_modulo2`… | Empty (Plain Axes) | Centro del texto curatorial del módulo, sobre la cara frontal de su tótem. Su +Y local apunta hacia el visitante. El texto sale de `contenido/moduloN/modulo.md` (D-37). |
 | `COL_*` | Malla simple | Colisiones. Se ocultan en el visor. Ej.: `COL_muro_norte`. |
 | `PISO_*` | Malla | Superficies caminables y destino de teletransporte. Ej.: `PISO_sala1`. |
 
@@ -149,7 +151,7 @@ Cualquier otro objeto se exporta y se renderiza como parte de la arquitectura. N
 
 **Colecciones:** Blender exporta los objetos por nombre, no por colección. Las colecciones sirven para organizar la escena, pero el visor no las lee.
 
-**Estado de transición (D-26).** Mientras el módulo de Blender no se exporte con estos nombres, `tools/adaptar-modulo.mjs` asigna `OBRA_01…08` y `PARADA_0N` al único módulo actual. Los nodos `ZONA_moduloN` y `PARADA_moduloN` se añadirán cuando se defina la geometría de los módulos.
+**Archivo fuente (D-36).** El museo completo está en `blender/Museo cupulas.blend`: 4 cúpulas en cruz con pasillos, ya con todos los nombres del contrato (`OBRA_01…25`, `PARADA_xx`, `ZONA_modulo1…4`, `PARADA_moduloN`, `CURATORIAL_moduloN`, `COL_*`, `PISO_*`, `SPAWN`). Se exporta directo a `viewer/assets/models/sala.glb`; `tools/adaptar-modulo.mjs` (transición D-26) ya no se usa.
 
 ### 3. Obras: cómo se colocan
 
@@ -182,7 +184,7 @@ Se usa **un solo mapa de luz por sala o zona**, de **1024 a 2048 px**. El hornea
 
 ### 5. Colisiones y pisos
 
-- Los `COL_*` son mallas simples (cajas o planos). Se exportan **visibles** en el viewport de Blender; el visor los oculta y los usa para colisiones.
+- Los `COL_*` son mallas simples (cajas o planos), con cualquier rotación: el visor usa sus triángulos reales, no su caja envolvente. Bloquea todo `COL_*` que cruce la altura del cuerpo (de 0,1 m a 1,7 m sobre el piso). Se exportan **visibles** en el viewport de Blender; el visor los oculta y los usa para colisiones.
 - Los `PISO_*` son las superficies caminables. Se exportan visibles; el visor las usa para el teletransporte.
 - **Opción de archivo separado:** los proxies de colisión pueden ir en `assets/models/colisiones.glb`. Por defecto van dentro de `sala.glb` para tener un solo archivo.
 

@@ -23,12 +23,15 @@ export function crearDebug({ escena, datos, panel }) {
     <label><input type="checkbox" data-marcadores> ${t('debug.marcadores')}</label>
   `;
 
-  // Cajas de colisión en rojo (wireframe), ocultas al inicio
+  // Aristas reales de las mallas COL_* en rojo, ocultas al inicio (se ve también lo girado)
   const lineasColision = new THREE.Group();
   lineasColision.name = 'debug_colisiones';
   lineasColision.visible = false;
-  for (const caja of datos.cajasColision) {
-    lineasColision.add(new THREE.Box3Helper(caja, 0xff3355));
+  const materialLinea = new THREE.LineBasicMaterial({ color: 0xff3355 });
+  for (const malla of datos.colisiones) {
+    const aristas = new THREE.LineSegments(new THREE.EdgesGeometry(malla.geometry), materialLinea);
+    malla.matrixWorld.decompose(aristas.position, aristas.quaternion, aristas.scale);
+    lineasColision.add(aristas);
   }
   escena.add(lineasColision);
 

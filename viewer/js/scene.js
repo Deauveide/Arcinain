@@ -11,6 +11,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { t } from './i18n.js';
+import { prepararTriangulos } from './colisiones.js';
 
 const RE_OBRA = /^OBRA_\d+$/;
 const RE_PARADA = /^PARADA_\d+$/;
@@ -43,7 +44,7 @@ export async function cargarSala(url, alProgreso) {
     obras: new Map(),          // "OBRA_01" → Object3D
     paradas: new Map(),        // "PARADA_01" → Object3D
     colisiones: [],            // malla COL_* (oculta)
-    cajasColision: [],         // Box3 en coordenadas de mundo, para el movimiento
+    triangulosColision: [],    // triángulos de COL_* en mundo, para el movimiento (colisiones.js)
     pisos: [],                 // mallas PISO_* (caminables)
   };
 
@@ -69,9 +70,29 @@ export async function cargarSala(url, alProgreso) {
     throw new Error('El GLB no tiene el nodo SPAWN (contrato del README, sección 2).');
   }
 
-  datos.cajasColision = datos.colisiones.map((malla) => new THREE.Box3().setFromObject(malla));
+  datos.triangulosColision = prepararTriangulos(posicionesDeMundo(datos.colisiones));
 
   return datos;
+}
+
+/**
+ * Vértices de todos los triángulos de las mallas, en coordenadas de mundo (x, y, z por vértice).
+ * Respeta la rotación y la escala de cada nodo: un muro girado en Blender colisiona girado.
+ */
+function posicionesDeMundo(mallas) {
+  const salida = [];
+  const v = new THREE.Vector3();
+  for (const malla of mallas) {
+    const geometria = malla.geometry;
+    const pos = geometria.getAttribute('position');
+    const indice = geometria.getIndex();
+    const total = indice ? indice.count : pos.count;
+    for (let i = 0; i < total; i++) {
+      v.fromBufferAttribute(pos, indice ? indice.getX(i) : i).applyMatrix4(malla.matrixWorld);
+      salida.push(v.x, v.y, v.z);
+    }
+  }
+  return salida;
 }
 
 /** Dirección de mundo del eje -Z local de un objeto (hacia donde "mira" el empty). */
