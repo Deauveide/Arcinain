@@ -59,7 +59,9 @@ const origenes = doc.getRoot().listNodes()
   .map((n) => [n.getName(), n.getWorldTranslation()]);
 console.log(`${RUTA}\n${colision.length} triángulos de colisión, ${piso.length} de piso, ${origenes.length} puntos de partida`);
 
-let fallos = 0;
+// Sin SPAWN ni paradas no hay nada que probar: es un GLB roto, no un éxito
+let fallos = origenes.some(([nombre]) => nombre === 'SPAWN') ? 0 : 1;
+if (fallos) console.log('FALLO: el GLB no tiene SPAWN.');
 const DIRECCIONES = 72;
 for (const [nombre, origen] of origenes) {
   if (!hayPiso(origen[0], origen[2]) || holgura(colision, origen[0], origen[2], RADIO, BASE, TOPE) < 0) {

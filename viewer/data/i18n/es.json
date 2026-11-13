@@ -33,5 +33,17 @@
   },
   "obras": {
     "marcador": "Obra"
+  },
+  "ficha": {
+    "titulo": "Título de la obra",
+    "artista": "Nombre del artista",
+    "anio": "Año",
+    "tecnica": "Técnica",
+    "medidas": "{alto} × {ancho} cm",
+    "proceso": "Sobre el proceso"
+  },
+  "curatorial": {
+    "titulo": "Sala {n}",
+    "texto": "Aquí irá el texto curatorial de esta sala: el hilo que une las obras, su contexto y lo que propone al visitante. Se escribe en contenido/moduloN/modulo.md."
   }
 }

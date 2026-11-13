@@ -10,11 +10,11 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
-import { t } from './i18n.js';
 import { prepararTriangulos } from './colisiones.js';
 
 const RE_OBRA = /^OBRA_\d+$/;
 const RE_PARADA = /^PARADA_\d+$/;
+const RE_CURATORIAL = /^CURATORIAL_modulo\d+$/;
 
 /**
  * Carga el GLB y devuelve los datos ya clasificados.
@@ -43,6 +43,7 @@ export async function cargarSala(url, alProgreso) {
     spawn: null,               // Object3D de SPAWN
     obras: new Map(),          // "OBRA_01" → Object3D
     paradas: new Map(),        // "PARADA_01" → Object3D
+    curatoriales: new Map(),   // "CURATORIAL_modulo1" → Object3D (texto del tótem, D-37)
     colisiones: [],            // malla COL_* (oculta)
     triangulosColision: [],    // triángulos de COL_* en mundo, para el movimiento (colisiones.js)
     pisos: [],                 // mallas PISO_* (caminables)
@@ -58,6 +59,8 @@ export async function cargarSala(url, alProgreso) {
       datos.obras.set(nombre, objeto);
     } else if (RE_PARADA.test(nombre)) {
       datos.paradas.set(nombre, objeto);
+    } else if (RE_CURATORIAL.test(nombre)) {
+      datos.curatoriales.set(nombre, objeto);
     } else if (nombre.startsWith('COL_') && objeto.isMesh) {
       objeto.visible = false;  // invisible en el visor; sirve solo para colisiones
       datos.colisiones.push(objeto);
@@ -104,74 +107,6 @@ export function direccionDeMirada(objeto) {
 /** Ángulo de guiñada (yaw) que hace mirar hacia la dirección (dx, dz). Misma convención que el exportador. */
 export function guinadaDeDireccion(dx, dz) {
   return Math.atan2(-dx, -dz);
-}
-
-/**
- * Crea un marcador provisional para cada obra: un plano con su código, orientado
- * hacia el interior de la sala. Sirve para verificar posición y orientación.
- * Se reemplaza por la imagen real en la fase 2.
- */
-export function crearMarcadoresObra(datos, anchoM = 1.0, altoM = 0.7) {
-  const grupo = new THREE.Group();
-  grupo.name = 'marcadores_obra';
-
-  for (const [codigo, nodo] of datos.obras) {
-    const posicion = nodo.getWorldPosition(new THREE.Vector3());
-    const dir = direccionDeMirada(nodo);
-
-    const lienzo = document.createElement('canvas');
-    lienzo.width = 512;
-    lienzo.height = 360;
-    const ctx = lienzo.getContext('2d');
-    ctx.fillStyle = '#d9d4c7';
-    ctx.fillRect(0, 0, lienzo.width, lienzo.height);
-    ctx.strokeStyle = '#8a6d2f';
-    ctx.lineWidth = 14;
-    ctx.strokeRect(14, 14, lienzo.width - 28, lienzo.height - 28);
-    ctx.fillStyle = '#2b2a27';
-    ctx.font = 'bold 64px system-ui, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    // Texto genérico ("Obra"), sin el código: el código sigue en el nombre del nodo (contrato).
-    ctx.fillText(t('obras.marcador'), lienzo.width / 2, lienzo.height / 2);
-
-    const textura = new THREE.CanvasTexture(lienzo);
-    textura.colorSpace = THREE.SRGBColorSpace;
-
-    // Las obras no reciben luz ni tone mapping: su color no cambia con la sala (decisión D-04).
-    const material = new THREE.MeshBasicMaterial({ map: textura, toneMapped: false, side: THREE.FrontSide });
-    const plano = new THREE.Mesh(new THREE.PlaneGeometry(anchoM, altoM), material);
-    plano.name = `marcador_${codigo}`;
-
-    // Un poco delante de la pared para evitar parpadeo (z-fighting).
-    plano.position.copy(posicion).addScaledVector(dir, 0.02);
-    // El +Z local del plano apunta a la sala (hacia dir): así se ve desde el interior.
-    plano.lookAt(plano.position.clone().add(dir));
-    grupo.add(plano);
-  }
-
-  datos.raiz.add(grupo);
-  return grupo;
-}
-
-/**
- * Pone una imagen real en el marcador de una obra (prueba de exposición).
- * Conserva la altura del marcador y ajusta el ancho a la proporción de la imagen,
- * para no estirarla. No toca obras.json ni recorrido.json.
- * @returns {Promise<void>} Resuelve cuando la imagen ya está aplicada.
- */
-export async function aplicarImagenObra(datos, codigo, url, altoM = 0.7) {
-  const plano = datos.raiz.getObjectByName(`marcador_${codigo}`);
-  if (!plano) throw new Error(`No existe el marcador de ${codigo}.`);
-
-  const textura = await new THREE.TextureLoader().loadAsync(url);
-  textura.colorSpace = THREE.SRGBColorSpace;
-
-  const { width, height } = textura.image;
-  plano.material.map = textura;
-  plano.material.needsUpdate = true;
-  // La geometría base mide 1 m de ancho; se escala en X para la proporción real.
-  plano.scale.x = (altoM * (width / height)) / 1.0;
 }
 
 /**

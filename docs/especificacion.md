@@ -92,7 +92,10 @@ Texto de la ficha, en párrafos normales. No hay que cuidar comillas ni comas.
 | `profundidad_m` | No | Metros. Por defecto 0,03. |
 | `creditos`, `derechos` | No | Texto. |
 | `tipo` | No | `plano` (por defecto) o `escultura`. Una escultura exige `modelo.glb` (origen en la base). |
+| `proceso` | No | Texto sobre el proceso o los inicios de la obra. Va en una cartela sobre la ficha técnica, a la izquierda de la obra (D-37, D-38). |
 | Descripción | No | Todo el texto bajo el encabezado. |
+
+En la sala, cada obra lleva marco (y paspartú si `tecnica` menciona papel), la ficha técnica a 6 cm a la izquierda del marco (título, artista, año, técnica y medidas) y una lámpara cálida arriba (D-38). Se construyen en `viewer/js/presentacion.js` a partir de `OBRA_xx`; ajustes en su objeto `AJUSTES`.
 
 Reglas:
 - El **ID** de la obra es el nombre de su carpeta (`OBRA_07`) y coincide con el nodo del GLB. Es estable: no cambia aunque la obra cambie de módulo ni de orden.
@@ -102,7 +105,7 @@ Reglas:
 
 ### 4.3 `modulo.md` y `museo.md`
 
-`modulo.md`: encabezado con `titulo`; el texto debajo es la **introducción escrita** del módulo, que se muestra como subtítulo mientras suena `intro.ogg`.
+`modulo.md`: encabezado con `titulo`; el texto debajo es la **introducción escrita** del módulo, que se muestra como subtítulo mientras suena `intro.ogg`. Campo opcional `texto_curatorial`: el texto del tótem del centro de la cúpula (`CURATORIAL_moduloN`, D-37); si falta, el tótem muestra la introducción.
 
 `museo.md`: encabezado con `nombre`, `inicio_modulo` (módulo donde aparece el visitante, por defecto el primero), `kiosco_inactividad_s` (90), `pausa_entre_paradas_s` (5) y `pausa_sin_audio_s` (8); el texto debajo es la bienvenida de la pantalla de inicio.
 

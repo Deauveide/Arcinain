@@ -2,9 +2,16 @@
 // Si el archivo no carga, la interfaz muestra la clave en lugar de romperse.
 
 let diccionario = {};
+let codigoIdioma = 'es';
+
+/** Código del idioma activo ("es"), para elegir textos por idioma en obras.json y modulos.json. */
+export function idioma() {
+  return codigoIdioma;
+}
 
 /** Carga el idioma indicado. Devuelve true si cargó bien. */
 export async function cargarIdioma(ruta = './data/i18n/es.json') {
+  codigoIdioma = /([a-z]{2})\.json$/.exec(ruta)?.[1] ?? 'es';
   try {
     const respuesta = await fetch(ruta, { cache: 'no-cache' });
     if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);

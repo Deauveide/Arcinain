@@ -151,7 +151,7 @@ Cualquier otro objeto se exporta y se renderiza como parte de la arquitectura. N
 
 **Colecciones:** Blender exporta los objetos por nombre, no por colección. Las colecciones sirven para organizar la escena, pero el visor no las lee.
 
-**Archivo fuente (D-36).** El museo completo está en `blender/Museo cupulas.blend`: 4 cúpulas en cruz con pasillos, ya con todos los nombres del contrato (`OBRA_01…25`, `PARADA_xx`, `ZONA_modulo1…4`, `PARADA_moduloN`, `CURATORIAL_moduloN`, `COL_*`, `PISO_*`, `SPAWN`). Se exporta directo a `viewer/assets/models/sala.glb`; `tools/adaptar-modulo.mjs` (transición D-26) ya no se usa.
+**Archivo fuente (D-36).** El museo completo está en `blender/Museo cupulas.blend`: 4 cúpulas en cruz con pasillos, ya con todos los nombres del contrato (`OBRA_01…25`, `PARADA_xx`, `ZONA_modulo1…4`, `PARADA_moduloN`, `CURATORIAL_moduloN`, `COL_*`, `PISO_*`, `SPAWN`). Se exporta a `blender/sala-export.glb` y `npm run tools:optimizar` escribe `viewer/assets/models/sala.glb` (sección 6); `tools/adaptar-modulo.mjs` (transición D-26) ya no se usa.
 
 ### 3. Obras: cómo se colocan
 
@@ -197,8 +197,10 @@ Se usa el **exportador glTF 2.0 integrado en Blender** (*File → Export → glT
 2. Verificar la lista de la sección 7.
 3. Exportar en formato **glTF Binary (`.glb`)**, con imágenes embebidas.
 4. Configurar las opciones de la tabla siguiente.
-5. Guardar en `viewer/assets/models/sala.glb`.
-6. Ejecutar `npm run tools:validar` (a partir de la fase 2) para comprobar nodos y referencias.
+5. Guardar en `blender/sala-export.glb` (no directamente en `sala.glb`).
+6. Ejecutar `npm run tools:optimizar`: fusiona las mallas estáticas (de ~370 a ~12 llamadas de dibujo), cambia la transmisión del tragaluz por transparencia simple y escribe `viewer/assets/models/sala.glb` conservando los nodos del contrato (D-40).
+7. Ejecutar `npm run tools:colisiones` para comprobar que no se pueda salir de la sala.
+8. Ejecutar `npm run tools:validar` (a partir de la fase 2) para comprobar nodos y referencias.
 
 **Opciones del exportador (Blender 5.2 LTS; los nombres pueden variar entre versiones):**
 

@@ -4,7 +4,8 @@
 
 import * as THREE from 'three';
 import { cargarIdioma, t, aplicarTraducciones } from './i18n.js';
-import { cargarSala, crearMarcadoresObra, crearMarcadoresParada, aplicarImagenObra } from './scene.js';
+import { cargarSala, crearMarcadoresParada } from './scene.js';
+import { cargarContenido, crearPresentacion } from './presentacion.js';
 import { Navegacion } from './navigation.js';
 import { crearDebug } from './debug.js';
 
@@ -120,13 +121,14 @@ async function iniciar() {
     return;
   }
   escena.add(datos.raiz);
-  crearMarcadoresObra(datos);
+  // Marcos, fichas, lámparas y textos curatoriales (D-37 a D-39). Sin obras.json usa textos de ejemplo.
+  const presentacion = crearPresentacion(datos, await cargarContenido());
   crearMarcadoresParada(datos);
   // Prueba de exposición: ?poster=1 pone el poster de prueba en OBRA_01.
   // Es temporal y no registra nada en recorrido.json ni en obras.json.
   if (parametros.get('poster') === '1') {
     try {
-      await aplicarImagenObra(datos, 'OBRA_01', './assets/obras/full/poster-prueba.png');
+      await presentacion.aplicarImagen('OBRA_01', './assets/obras/full/poster-prueba.png');
     } catch (error) {
       console.error('[prueba] No se pudo aplicar el poster:', error);
     }

@@ -10,11 +10,13 @@
   "scripts": {
     "tools:sala": "node tools/generar-sala-provisional.mjs",
     "tools:modulo-unico": "node tools/adaptar-modulo.mjs",
+    "tools:optimizar": "node tools/optimizar-sala.mjs",
     "tools:colisiones": "node tools/probar-colisiones.mjs",
     "viewer": "node tools/servir-visor.mjs"
   },
   "devDependencies": {
-    "@gltf-transform/core": "4.5.1"
+    "@gltf-transform/core": "4.5.1",
+    "@gltf-transform/functions": "4.5.1"
   },
   "dependencies": {
     "@gltf-transform/extensions": "4.5.1"
