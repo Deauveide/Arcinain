@@ -151,7 +151,7 @@ Cualquier otro objeto se exporta y se renderiza como parte de la arquitectura. N
 
 **Colecciones:** Blender exporta los objetos por nombre, no por colección. Las colecciones sirven para organizar la escena, pero el visor no las lee.
 
-**Archivo fuente (D-36).** El museo completo está en `blender/Museo cupulas.blend`: 4 cúpulas en cruz con pasillos, ya con todos los nombres del contrato (`OBRA_01…25`, `PARADA_xx`, `ZONA_modulo1…4`, `PARADA_moduloN`, `CURATORIAL_moduloN`, `COL_*`, `PISO_*`, `SPAWN`). Se exporta a `blender/sala-export.glb` y `npm run tools:optimizar` escribe `viewer/assets/models/sala.glb` (sección 6); `tools/adaptar-modulo.mjs` (transición D-26) ya no se usa.
+**Archivo fuente (D-36).** El museo completo está en `blender/Museo cupulas.blend`: 5 cúpulas en cruz con pasillos; se aparece en la central, sala 1; 2 obras por pared: 8 en la sala 1 y 14 en cada sala de obras; muros interiores gris oscuro (D-36, D-43, D-44), ya con todos los nombres del contrato (`OBRA_01…64`, `PARADA_xx`, `ZONA_modulo1…5`, `PARADA_moduloN`, `CURATORIAL_moduloN`, `COL_*`, `PISO_*`, `SPAWN`). Se exporta a `blender/sala-export.glb` y `npm run tools:optimizar` escribe `viewer/assets/models/sala.glb` (sección 6); `tools/adaptar-modulo.mjs` (transición D-26) ya no se usa.
 
 ### 3. Obras: cómo se colocan
 

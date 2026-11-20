@@ -29,11 +29,17 @@ export const AJUSTES = {
   COLOR_LUZ: new THREE.Color(1.0, 0.62, 0.22),     // ámbar: halo en el muro y lente de la lámpara
   INTENSIDAD_HALO: 0.4,
 
-  TAMANO_POR_DEFECTO: { ancho: 1.0, alto: 0.7 },  // m, mientras la obra no tenga ficha
+  TAMANO_POR_DEFECTO: { ancho: 0.75, alto: 0.6 }, // m, mientras la obra no tenga ficha (cabe en el panel de 0,9 m con marco)
   MARCO_ANCHO: 0.05,        // m, ancho de la moldura vista de frente
   MARCO_FONDO: 0.035,       // m, cuánto sobresale del muro
   PASPARTU: 0.08,           // m, margen blanco alrededor de obras sobre papel
   SEPARACION_FICHA: 0.06,   // m, del borde del marco a la ficha (recomendación de los audios: 5–6 cm)
+  // Obras sobre papel (los recortes de la sala 1): con 6 cm la ficha caía sobre el borde del panel
+  // y desde un lado quedaba tapada; con 14 cm queda en el muro, a la vista (pedido del usuario, 20/11/2026)
+  SEPARACION_FICHA_PAPEL: 0.14,
+  // m, de la ficha al plano de OBRA_xx. Con 4 mm, donde el muro sobresale del nodo (hasta ≈ 2,5 cm en la sala 1)
+  // la ficha quedaba dentro del muro y no se veía.
+  DESPEGUE_FICHA: 0.05,
   FICHA: { ancho: 0.24, alto: 0.16 },
   PROCESO: { ancho: 0.24, alto: 0.3 },
   CURATORIAL: { ancho: 0.8, alto: 1.4 },
@@ -390,14 +396,16 @@ export function crearPresentacion(datos, contenido) {
         new THREE.Quaternion().setFromUnitVectors(EJE_Z, haciaObra)));
 
       // Halo en el muro, detrás del marco
-      halos.setMatrixAt(i, enObra(base, [0, 0.08, 0.003], [W + 0.8, H + 0.9, 1]));
+      // Más angosto que alto: con tres obras por pared, los halos no se montan sobre las vecinas
+      halos.setMatrixAt(i, enObra(base, [0, 0.08, 0.003], [W + 0.45, H + 0.9, 1]));
 
-      // Ficha: a la izquierda (−X), a SEPARACION_FICHA del marco, alineada con su borde inferior
+      // Ficha: a la izquierda (−X), a SEPARACION_FICHA (o _PAPEL) del marco, alineada con su borde inferior
       const fw = A.FICHA.ancho;
       const fh = A.FICHA.alto;
-      const fx = -W / 2 - A.SEPARACION_FICHA - fw / 2;
+      const separacion = paspartu ? A.SEPARACION_FICHA_PAPEL : A.SEPARACION_FICHA;
+      const fx = -W / 2 - separacion - fw / 2;
       const fy = -H / 2 + fh / 2;
-      const mFicha = enObra(base, [fx, fy, 0.004], [fw, fh, 1]);
+      const mFicha = enObra(base, [fx, fy, A.DESPEGUE_FICHA], [fw, fh, 1]);
       const v0 = posiciones.length / 3;
       for (const [cx, cy] of [[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]]) {
         _p.set(cx, cy, 0).applyMatrix4(mFicha);
@@ -412,7 +420,7 @@ export function crearPresentacion(datos, contenido) {
 
       // Texto de proceso: sobre la ficha, en la misma columna
       if (obra.proceso) {
-        obra.proceso.matrix.copy(enObra(base, [fx, fy + fh / 2 + 0.03 + A.PROCESO.alto / 2, 0.004],
+        obra.proceso.matrix.copy(enObra(base, [fx, fy + fh / 2 + 0.03 + A.PROCESO.alto / 2, A.DESPEGUE_FICHA],
           [A.PROCESO.ancho, A.PROCESO.alto, 1]));
       }
     });

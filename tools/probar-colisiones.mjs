@@ -62,8 +62,13 @@ console.log(`${RUTA}\n${colision.length} triángulos de colisión, ${piso.length
 // Sin SPAWN ni paradas no hay nada que probar: es un GLB roto, no un éxito
 let fallos = origenes.some(([nombre]) => nombre === 'SPAWN') ? 0 : 1;
 if (fallos) console.log('FALLO: el GLB no tiene SPAWN.');
-const DIRECCIONES = 72;
+// 72 direcciones desde SPAWN y las paradas de sala; 16 desde cada parada de obra (hay ~90 y
+// cubren las mismas paredes: con 72 la prueba pasaba de 10 minutos)
+const direccionesDe = (nombre) => (nombre === 'SPAWN' || nombre.startsWith('PARADA_modulo') ? 72 : 16);
+let total = 0;
 for (const [nombre, origen] of origenes) {
+  const DIRECCIONES = direccionesDe(nombre);
+  total += DIRECCIONES;
   if (!hayPiso(origen[0], origen[2]) || holgura(colision, origen[0], origen[2], RADIO, BASE, TOPE) < 0) {
     console.log(`FALLO ${nombre}: el punto de partida no tiene piso o está dentro de una colisión`);
     fallos++;
@@ -88,6 +93,5 @@ for (const [nombre, origen] of origenes) {
   }
 }
 
-const total = origenes.length * DIRECCIONES;
-console.log(fallos === 0 ? `OK: ${total} recorridos (${origenes.length} puntos × ${DIRECCIONES} direcciones), nunca sale del piso ni atraviesa colisiones.` : `${fallos} de ${total} recorridos fallan.`);
+console.log(fallos === 0 ? `OK: ${total} recorridos desde ${origenes.length} puntos, nunca sale del piso ni atraviesa colisiones.` : `${fallos} de ${total} recorridos fallan.`);
 process.exit(fallos === 0 ? 0 : 1);
