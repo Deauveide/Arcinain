@@ -1,0 +1,202 @@
+[
+  {
+    "id": "OBRA_01",
+    "nodo": "OBRA_01",
+    "modulo": "modulo1",
+    "tipo": "plano",
+    "titulo": {
+      "es": "Premio en Arica, Chile"
+    },
+    "artista": {
+      "es": "El Pueblo (Cali)"
+    },
+    "tecnica": {
+      "es": "Recorte de prensa sobre papel"
+    },
+    "descripcion": {
+      "es": "Reportaje especial de El Pueblo. Arcinaín Muñoz López ganó el Concurso Latinoamericano de Arte Autóctono en Arica (Chile) y, por estar en desacuerdo con la dictadura militar chilena, rechazó los 300 000 pesos del premio. Ilustra la nota una obra firmada «Arcinaín-72». Foto de Fernán Martínez. Sin fecha en el recorte: el texto habla de un premio recibido «a fines del año pasado» y otra nota de 1981 lo sitúa en 1974."
+    },
+    "anio": "c. 1975",
+    "dimensiones": {
+      "alto_m": 0.85
+    },
+    "creditos": "Archivo de prensa de Arcinaín Muñoz",
+    "web": "./assets/obras/web/OBRA_01.jpg",
+    "parada": "PARADA_01"
+  },
+  {
+    "id": "OBRA_02",
+    "nodo": "OBRA_02",
+    "modulo": "modulo1",
+    "tipo": "plano",
+    "titulo": {
+      "es": "Angustia hecha brochazos rápidos sobre el lienzo"
+    },
+    "artista": {
+      "es": "Occidente (Cali)"
+    },
+    "tecnica": {
+      "es": "Recorte de prensa sobre papel"
+    },
+    "descripcion": {
+      "es": "Occidente, domingo 5 de marzo de 1978. Texto de José Saguna. Foto Occidente. «El dolor de los negros ha sido la temática que ahora aboca el maestro Arcinaín»; la obra será llevada a Europa «como expresión acabada del arte nuevo que se hace ahora en América»."
+    },
+    "anio": "1978",
+    "dimensiones": {
+      "alto_m": 0.85
+    },
+    "creditos": "Archivo de prensa de Arcinaín Muñoz",
+    "web": "./assets/obras/web/OBRA_02.jpg",
+    "parada": "PARADA_02"
+  },
+  {
+    "id": "OBRA_03",
+    "nodo": "OBRA_03",
+    "modulo": "modulo1",
+    "tipo": "plano",
+    "titulo": {
+      "es": "Galería Espacios inaugura con Arcinaín"
+    },
+    "artista": {
+      "es": "Periódico de Cali (por identificar)"
+    },
+    "tecnica": {
+      "es": "Recorte de prensa sobre papel"
+    },
+    "descripcion": {
+      "es": "Sección «Arte», noviembre o diciembre de 1978 (anotaciones a mano). La galería Espacios de Clarita Mejía, en Cali, abre con una retrospectiva de los últimos diez años de Arcinaín, antes de su viaje a París, Londres y Roma. Incluye su autorretrato, que sería expuesto en París."
+    },
+    "anio": "1978",
+    "dimensiones": {
+      "alto_m": 0.85
+    },
+    "creditos": "Archivo de prensa de Arcinaín Muñoz",
+    "web": "./assets/obras/web/OBRA_03.jpg",
+    "parada": "PARADA_03"
+  },
+  {
+    "id": "OBRA_04",
+    "nodo": "OBRA_04",
+    "modulo": "modulo1",
+    "tipo": "plano",
+    "titulo": {
+      "es": "Un «Montañero Cósmico» por vacante de Picasso"
+    },
+    "artista": {
+      "es": "El Pueblo (Cali)"
+    },
+    "tecnica": {
+      "es": "Recorte de prensa sobre papel"
+    },
+    "descripcion": {
+      "es": "Abril de 1979 (anotación a mano). Foto El Pueblo, Ante. Entrevista antes de su exposición en la sede de la Unesco en París: «Hay una vacante. La de Pablo Picasso. Nadie se ha atrevido a buscarla. Yo, Arcinaín Muñoz, […] voy por ella»."
+    },
+    "anio": "1979",
+    "dimensiones": {
+      "alto_m": 0.85
+    },
+    "creditos": "Archivo de prensa de Arcinaín Muñoz",
+    "web": "./assets/obras/web/OBRA_04.jpg",
+    "parada": "PARADA_04"
+  },
+  {
+    "id": "OBRA_05",
+    "nodo": "OBRA_05",
+    "modulo": "modulo1",
+    "tipo": "plano",
+    "titulo": {
+      "es": "Subasta de Arcinaín · Génesis de Dios"
+    },
+    "artista": {
+      "es": "Occidente (Cali)"
+    },
+    "tecnica": {
+      "es": "Recorte de prensa sobre papel"
+    },
+    "descripcion": {
+      "es": "Dos notas de Occidente. Octubre de 1979: subasta de más de 500 obras, entre óleos y dibujos, en la Cámara de Comercio de Cali a beneficio de Unicáncer (foto de Gómez). Enero de 1980: el pintor junto a un cuadro de la serie «Génesis de Dios», que expondría en la Casa del Cauca de Bogotá antes de viajar a París (fotocolor de Absalón Martínez)."
+    },
+    "anio": "1979–1980",
+    "dimensiones": {
+      "alto_m": 0.9
+    },
+    "creditos": "Archivo de prensa de Arcinaín Muñoz",
+    "web": "./assets/obras/web/OBRA_05.jpg",
+    "parada": "PARADA_05"
+  },
+  {
+    "id": "OBRA_06",
+    "nodo": "OBRA_06",
+    "modulo": "modulo1",
+    "tipo": "plano",
+    "titulo": {
+      "es": "Arcinaín Muñoz, de Zarzal a París"
+    },
+    "artista": {
+      "es": "Occidente (Cali)"
+    },
+    "tecnica": {
+      "es": "Recorte de prensa sobre papel"
+    },
+    "descripcion": {
+      "es": "«Para mí lo más importante es la figura humana en toda su dramática angustia». Arcinaín en su estudio, rodeado de sus «seres», antes de radicarse en París. Foto Occidente de Barragán; la portada en color «De Zarzal a París» viene pegada en la misma hoja y su fuente no está anotada. Sin fecha en el recorte."
+    },
+    "anio": "c. 1980",
+    "dimensiones": {
+      "alto_m": 0.85
+    },
+    "creditos": "Archivo de prensa de Arcinaín Muñoz",
+    "web": "./assets/obras/web/OBRA_06.jpg",
+    "parada": "PARADA_06"
+  },
+  {
+    "id": "OBRA_07",
+    "nodo": "OBRA_07",
+    "modulo": "modulo1",
+    "tipo": "plano",
+    "titulo": {
+      "es": "Arcinaín, ese pintor asombroso"
+    },
+    "artista": {
+      "es": "Periódico por identificar"
+    },
+    "tecnica": {
+      "es": "Recorte de prensa sobre papel"
+    },
+    "descripcion": {
+      "es": "«Un vallecaucano en el Pompidou», 1982 (anotación a mano). Perfil del pintor: su búsqueda constante, su «formidable temática negra» y el ingreso de parte de su obra al Museo Georges Pompidou de París."
+    },
+    "anio": "1982",
+    "dimensiones": {
+      "alto_m": 0.85
+    },
+    "creditos": "Archivo de prensa de Arcinaín Muñoz",
+    "web": "./assets/obras/web/OBRA_07.jpg",
+    "parada": "PARADA_07"
+  },
+  {
+    "id": "OBRA_08",
+    "nodo": "OBRA_08",
+    "modulo": "modulo1",
+    "tipo": "plano",
+    "titulo": {
+      "es": "Arte, el legado de Arcinaín Muñoz"
+    },
+    "artista": {
+      "es": "El País (Cali)"
+    },
+    "tecnica": {
+      "es": "Recorte de prensa sobre papel"
+    },
+    "descripcion": {
+      "es": "El País, Cali, lunes 25 de mayo de 1992. Nota sobre su muerte, el 18 de mayo de 1992, a los 55 años, en Cali; repasa su formación en Bellas Artes de Cali y en la Escuela de San Jorge de Barcelona, el premio en Chile y su paso por el Pompidou. Junto a ella, el aviso de agradecimiento de su familia."
+    },
+    "anio": "1992",
+    "dimensiones": {
+      "alto_m": 0.594
+    },
+    "creditos": "Archivo de prensa de Arcinaín Muñoz",
+    "web": "./assets/obras/web/OBRA_08.jpg",
+    "parada": "PARADA_08"
+  }
+]

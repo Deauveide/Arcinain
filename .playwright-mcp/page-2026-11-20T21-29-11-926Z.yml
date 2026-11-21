@@ -1,0 +1,8 @@
+- generic [active] [ref=e1]:
+  - region "Museo Rayo":
+    - generic [ref=e4]:
+      - heading "Museo Rayo" [level=1] [ref=e5]
+      - paragraph [ref=e6]: Recorrido virtual 3D · Roldanillo, Valle del Cauca
+      - paragraph [ref=e7]: Arrastra la pantalla para mirar. Usa el joystick para moverte. Toca el piso o una parada para ir allí.
+      - status [ref=e10]: "Cargando la sala: 100 %"
+      - button "Entrar" [disabled] [ref=e12]
